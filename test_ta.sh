@@ -65,6 +65,7 @@ install_percona_telemetry() {
         echo "Service is still disabled as expected."
     else
         echo "Warning: Service is enabled, but it should be disabled."
+        exit 1
     fi
 }
 
