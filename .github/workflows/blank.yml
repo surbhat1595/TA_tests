@@ -1,0 +1,49 @@
+name: Run Percona Telemetry Script
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  run-script:
+    name: Run Percona Script on Matrix of Platforms
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-22.04, ubuntu-24.04, debian:11, debian:12, oraclelinux:8, oraclelinux:9]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker container for ${{ matrix.os }}
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            --name percona-run-${{ matrix.os }} \
+            ${{ matrix.os }} bash -c "
+              # Install necessary dependencies based on OS
+              case '${{ matrix.os }}' in
+                ubuntu-20.04|ubuntu-22.04|ubuntu-24.04)
+                  apt-get update
+                  apt-get install -y sudo wget gnupg2 lsb-release
+                  ;;
+                debian:11|debian:12)
+                  apt-get update
+                  apt-get install -y sudo wget gnupg2 lsb-release
+                  ;;
+                oraclelinux:8|oraclelinux:9)
+                  yum install -y sudo wget gnupg2
+                  ;;
+              esac
+
+              # Make the script executable
+              chmod +x ./test_ta.sh
+
+              # Run the script
+              sudo ./test_ta.sh
+            "
