@@ -25,7 +25,7 @@ install_percona_telemetry() {
         debian | ubuntu)
             if [ "$VERSION_ID" == "11" ] || [ "$VERSION_ID" == "12" ] || [ "$VERSION_ID" == "20" ] || [ "$VERSION_ID" == "22" ] || [ "$VERSION_ID" == "24" ]; then
                 sudo apt-get update
-                sudo apt-get install -y wget gnupg2 lsb-release
+                sudo apt-get install -y wget gnupg2 lsb-release curl systemd
                 wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
                 sudo dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
             else
