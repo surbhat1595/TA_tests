@@ -21,10 +21,13 @@ jobs:
 
       - name: Set up Docker container for ${{ matrix.os }}
         run: |
+          # Replace ':' with '-' for a valid container name
+          container_name=$(echo "${{ matrix.os }}" | sed 's/:/-/g')
+
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
             -w /workspace \
-            --name percona-run-${{ matrix.os//:/- }} \
+            --name percona-run-${container_name} \
             ${{ matrix.os }} bash -c "
               # Install necessary dependencies based on OS
               case '${{ matrix.os }}' in
