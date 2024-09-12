@@ -24,7 +24,7 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
             -w /workspace \
-            --name percona-run-${{ matrix.os }} \
+            --name ${{ matrix.os }} \
             ${{ matrix.os }} bash -c "
               # Install necessary dependencies based on OS
               case '${{ matrix.os }}' in
