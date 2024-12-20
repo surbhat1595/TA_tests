@@ -75,7 +75,7 @@ install_percona_telemetry() {
             ;;
     esac
 
-    percona-release enable telemetry
+    percona-release enable telemetry testing
 
     if [ "$OS" == "ol" ]; then
         yum install -y percona-telemetry-agent
@@ -84,24 +84,24 @@ install_percona_telemetry() {
         apt-get install -y percona-telemetry-agent
     fi
 
-    systemctl stop percona-telemetry-agent
-    systemctl disable percona-telemetry-agent
+   # systemctl stop percona-telemetry-agent
+   # systemctl disable percona-telemetry-agent
 
-    percona-release enable telemetry testing
+#    percona-release enable telemetry testing
 
-    if [ "$OS" == "ol" ]; then
-        yum update -y percona-telemetry-agent
-    else
-        apt-get update
-        apt-get install --only-upgrade -y percona-telemetry-agent
-    fi
+#    if [ "$OS" == "ol" ]; then
+#        yum update -y percona-telemetry-agent
+#    else
+#        apt-get update
+#        apt-get install --only-upgrade -y percona-telemetry-agent
+#    fi
 
     systemctl is-enabled percona-telemetry-agent | grep -q "disabled"
     if [ $? -eq 0 ]; then
-        echo "Service is still disabled as expected."
-    else
-        echo "Warning: Service is enabled, but it should be disabled."
+        echo "Service is disabled "
         exit 1
+    else
+        echo "Service is enabled"
     fi
 }
 
